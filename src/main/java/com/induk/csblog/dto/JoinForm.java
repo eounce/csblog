@@ -5,7 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Null;
 
 @Data
 public class JoinForm {

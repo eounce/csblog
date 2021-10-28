@@ -14,7 +14,8 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-    private String fileDir = "D:\\workSpace-intellij\\csblog\\csblog\\src\\main\\resources\\static\\image\\member\\";
+    private String path = System.getProperty("user.dir");
+    private String fileDir = path + "\\src\\main\\resources\\static\\image\\member\\";
 
     public String getFullPath(String filename) {
         return fileDir + filename;

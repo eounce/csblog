@@ -12,9 +12,12 @@ import java.util.Optional;
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<Blog> findTop5ByOrderByCreateDateDesc();
     List<Blog> findAllByCategoryIdAndTitleContainingOrderByCreateDateDesc(Long categoryId, String searchText,Pageable pageable);
+    List<Blog> findAllByTitleContainingOrderByCreateDateDesc(String searchText,Pageable pageable);
+
     Optional<Blog> findById(Long blogId);
     //@Query(value = "select DISTINCT b from Blog b left join fetch b.category where b.id = :blogId")
     //Optional<Blog> findById(@Param("blogId") Long blogId);
 
     Long countByCategoryIdAndTitleContaining(Long categoryId, String searchText);
+    Long countByTitleContaining(String searchText);
 }

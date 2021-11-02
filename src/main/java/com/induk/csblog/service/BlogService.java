@@ -24,8 +24,15 @@ public class BlogService {
         PageRequest pageRequest = PageRequest.of(paginationInfo.getCurrentPageNo()-1, paginationInfo.getRecordsPerPage());
         return blogRepository.findAllByCategoryIdAndTitleContainingOrderByCreateDateDesc(categoryId, searchText, pageRequest);
     }
+    public List<Blog> searchByBlogTitle(String searchText, PaginationInfo paginationInfo){
+        PageRequest pageRequest = PageRequest.of(paginationInfo.getCurrentPageNo()-1, paginationInfo.getRecordsPerPage());
+        return blogRepository.findAllByTitleContainingOrderByCreateDateDesc(searchText, pageRequest);
+    }
     public Long searchByBlogTitleCount(Long categoryId, String searchText){
         return blogRepository.countByCategoryIdAndTitleContaining(categoryId, searchText);
+    }
+    public Long searchByBlogTitleCount(String searchText){
+        return blogRepository.countByTitleContaining(searchText);
     }
 
     public List<Blog> lastBlogList(){

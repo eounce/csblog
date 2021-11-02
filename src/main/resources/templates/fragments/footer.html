@@ -77,6 +77,7 @@
 <div th:fragment="footer_bottom">
     <!-- Main jQuery -->
     <script src="/megakit-2/plugins/jquery/jquery.js"></script>
+    <script src="/megakit-2/plugins/jquery/jquery-3.4.1.js"></script>
     <script src="/megakit-2/js/contact.js"></script>
     <!-- Bootstrap 4.3.1 -->
     <script src="/megakit-2/plugins/bootstrap/js/popper.js"></script>
@@ -94,4 +95,51 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkeLMlsiwzp6b3Gnaxd86lvakimwGA6UA&callback=initMap"></script>
 
     <script src="/megakit-2/js/script.js"></script>
+
+    <script>
+        $(document).ready(function (){
+            $.ajax({
+                url : "/csblog/category/categoryList",
+                type:"POST",
+                dataType:"json",
+                contentType : "application/json; charset=UTF-8",
+                error: function (){
+                    alert("메뉴를 불러오지 못했습니다.");
+                },
+                success: function (categorys){
+                    var afterHtml = "";
+                    for(var i=0; i<categorys.length;i++){
+                        if(categorys[i].categoryId == 0) {
+                            var boxTrue = false;
+                            for(var j=0; j<categorys.length;j++){
+                                if(categorys[i].id == categorys[j].categoryId){
+                                    boxTrue = true;
+                                    break;
+                                }
+                            }
+                            if(boxTrue){
+                                afterHtml +=
+                                    "<li class='nav-item dropdown'>\n" +
+                                    "                                <a class='nav-link dropdown-toggle' href='#' id='dropdown"+ categorys[i].id +"' data-toggle='dropdown'\n" +
+                                    "                                   aria-haspopup='true' aria-expanded='false'>" + categorys[i].name + "</a>" +
+                                    "<ul class=\'dropdown-menu\' aria-labelledby=\'dropdown" +categorys[i].id+ "\'>";
+                                for(var j=0; j<categorys.length;j++){
+                                    if(categorys[j].categoryId == (categorys[i].id)){
+                                        afterHtml += "<li><a class='dropdown-item' href='/csblog/blogs/category/" +categorys[j].id+ "'>" +categorys[j].name + "</a></li>";
+                                    }
+                                }
+                                afterHtml +=
+                                    "</ul>" +
+                                    "</li>";
+                            }else{
+                                afterHtml += "<li class='nav-item'><a class='nav-link' href='/csblog/blogs/category/" +categorys[i].id+ "'>" +categorys[i].name+ "</a></li>";
+                            }
+                        }
+                    }
+                    document.querySelector("#categoryList").innerHTML += afterHtml;
+                    //$('#categoryList').innerHTML += afterHtml;
+                }
+            });
+        })
+    </script>
 </div>

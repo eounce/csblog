@@ -15,10 +15,10 @@ import java.util.UUID;
 public class FileStore {
 
     private String path = System.getProperty("user.dir");
-    private String fileDir = path + "\\src\\main\\resources\\static\\image\\member\\";
+    private String fileDir = path + "\\src\\main\\resources\\static\\image\\";
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
+    public String getFullPath(String filename, String path) {
+        return fileDir + path + "\\" + filename;
     }
 
     // 여러개의 파일 업로드
@@ -26,19 +26,19 @@ public class FileStore {
         ArrayList<UploadFile> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if(multipartFile.isEmpty()) {
-                storeFileResult.add(storeFile(multipartFile));
+                storeFileResult.add(storeFile(multipartFile, path));
             }
         }
         return storeFileResult;
     }
 
     // 하나의 파일 업로드
-    public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
+    public UploadFile storeFile(MultipartFile multipartFile, String path) throws IOException {
         if(multipartFile.isEmpty()) return null;
 
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+        multipartFile.transferTo(new File(getFullPath(storeFileName, path)));
         return new UploadFile(originalFilename, storeFileName);
     }
 

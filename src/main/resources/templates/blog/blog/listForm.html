@@ -1,0 +1,165 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title})">
+	<title>블로그</title>
+</head>
+
+
+
+<body>
+
+<!-- Header Start -->
+<header th:replace="fragments/header :: navigation">
+</header>
+<!-- Header Close --> 
+
+<div class="main-wrapper ">
+<section class="page-title bg-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block text-center">
+          <span class="text-white">컴소 블로그</span>
+			<h1 class="text-capitalize mb-4 text-lg"><span th:text="${category.name}"></span></h1>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="/csblog" class="text-white">홈</a></li>
+            <li class="list-inline-item"><span class="text-white">/</span></li>
+            <li class="list-inline-item"><a th:href="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id})}" class="text-white-50"><span th:text="${category.name}"></span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section blog-wrap bg-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+				<div class="row">
+					<div class="col-lg-6 text-left" style="margin-top: 13px;">
+						<h5 style="font-weight: 800"><i class="fas fa-clipboard-list"></i> <span th:text="${category.name}"></span></h5>
+					</div>
+					<div class="col-lg-6 text-right">
+						<a th:href="@{/csblog/blogs/add/category/{categoryId}(categoryId=${category.id})}" class="btn btn-small btn-main btn-round-full" style="font-size:15px;"><i class="ti-pencil-alt mr-2"></i> 게시글 작성하기</a>
+					</div>
+				</div>
+				<hr>
+                <div class="row">
+					<div class="col-lg-6 col-md-6 mb-5" th:each="blog : ${blogList}">
+						<div class="blog-item">
+							<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}">
+								<img th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" class="img-fluid rounded" style="width: 100%;height: 250px;">
+							</a>
+							<div class="blog-item-content bg-white p-4">
+								<h3 class="mt-2 mb-2"><a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}" th:text="${blog.title}" style="height:3em;overflow: hidden;display: -webkit-box;line-break: anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:2"></a></h3>
+								<p class="mt-2 mb-2" th:utext="${#strings.replace(#strings.replace(blog.content, newLineChar, '<br>'), ' ', '&nbsp;')}" style="height:5em;overflow: hidden;display: -webkit-box;line-break: anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:3;"></p>
+
+								<hr class="mb-1">
+								<div class="comment-area-box">
+									<img alt="" th:src="@{/csblog/members/images/{image}(image=${blog.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
+
+									<span th:text="${blog.member.name}" style="font-weight: bold"></span>
+
+									<div class="comment-meta mt-4 mt-lg-0 mt-md-0">
+										<span class="date-comm" th:text="${#strings.replace((#strings.substring(blog.createDate,0,16)), 'T', ' ')}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar-wrap">
+					<form id="searchBox" th:action="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id})}" method="GET">
+						<div class="sidebar-widget search card p-4 mb-3 border-0">
+							<input type="text" name="searchText" class="form-control" placeholder="검색" onkeydown="if(event.keyCode==13)document.getElementById('searchBox').submit();" th:value="${searchText}">
+							<a href="#" class="btn btn-mian btn-small d-block mt-2" onclick="document.getElementById('searchBox').submit()">search</a>
+						</div>
+					</form>
+
+					<div class="sidebar-widget latest-post card border-0 p-4 mb-3">
+						<h5>최근 작성된 게시글</h5>
+						<th:block th:each="blog : ${lastBlogList}">
+							<div class="media border-bottom py-3"><span></span>
+								<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}"><img class="mr-4" th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" style="width: 87px;height: 72px;"></a>
+								<div class="media-body">
+									<h6 class="my-2"><a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}" th:text="${blog.title}" style="display: -webkit-box;-webkit-box-orient: vertical;line-break: anywhere;-webkit-line-clamp:2;overflow: hidden;"></a></h6>
+									<span class="text-sm text-muted" th:text="${#strings.replace((#strings.substring(blog.createDate,0,16)), 'T', ' ')}"></span>
+								</div>
+							</div>
+						</th:block>
+					</div>
+
+					<div class="sidebar-widget bg-white p-4 mb-3">
+						<h5 class="mb-4">Follow Us</h5>
+						<ul class="list-inline author-socials text-center" >
+							<li class="list-inline-item mr-3">
+								<a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f text-muted"></i></a>
+							</li>
+							<li class="list-inline-item mr-3">
+								<a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter text-muted"></i></a>
+							</li>
+							<li class="list-inline-item mr-3">
+								<a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram text-muted"></i></a>
+							</li>
+							<li class="list-inline-item mr-3">
+								<a href="https://www.pinterest.co.kr/" target="_blank"><i class="fab fa-pinterest text-muted"></i></a>
+							</li>
+							<li class="list-inline-item mr-3">
+								<a href="https://www.behance.net/" target="_blank"><i class="fab fa-behance text-muted"></i></a>
+							</li>
+							<li class="list-inline-item mr-3">
+								<a href="https://www.google.com/" target="_blank"><i class="fab fa-google text-muted"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-8 text-center">
+                <nav class="navigation pagination py-2 d-inline-block">
+                    <div class="nav-links">
+                        <a th:if="${page.hasPreviousPage}" class="prev page-numbers"
+						   th:href="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id}, searchText=${searchText}, page=${page.firstPage -1})}">Prev</a>
+						<th:block th:each="p: ${#numbers.sequence(page.firstPage, page.lastPage)}">
+							<th:block th:if="${page.currentPageNo == p}">
+								<span aria-current="page" class="page-numbers current">
+									<span th:text="${p}"></span>
+								</span>
+							</th:block>
+							<th:block th:unless="${page.currentPageNo == p}">
+								<a class="page-numbers"
+								   th:href="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id}, searchText=${searchText}, page=${p})}">
+									<span th:text="${p}"></span>
+								</a>
+							</th:block>
+						</th:block>
+                        <a th:if="${page.hasNextPage}" class="next page-numbers"
+						   th:href="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id}, searchText=${searchText}, page=${page.lastPage +1})}">Next</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- footer Start -->
+	<footer th:replace="fragments/footer :: common_footer">
+	</footer>
+   
+    </div>
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+
+	<div th:replace="fragments/footer :: footer_bottom">
+	</div>
+
+  </body>
+  </html>

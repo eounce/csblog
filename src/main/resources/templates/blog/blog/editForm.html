@@ -1,0 +1,94 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title})">
+	<title>블로그</title>
+</head>
+
+
+<body>
+
+<!-- Header Start -->
+<header th:replace="fragments/header :: navigation">
+</header>
+<!-- Header Close --> 
+
+<div class="main-wrapper ">
+<section class="page-title bg-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block text-center">
+          <span class="text-white">컴소 블로그</span>
+			<h1 class="text-capitalize mb-4 text-lg"><span th:text="${category.name}"></span></h1>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="/csblog" class="text-white">홈</a></li>
+            <li class="list-inline-item"><span class="text-white">/</span></li>
+            <li class="list-inline-item"><a th:href="@{/csblog/blogs/category/{categoryId}(categoryId=${category.id})}" class="text-white-50" th:text="${category.name}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section blog-wrap bg-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8">
+				<div class="row">
+					<div class="col-lg-12">
+						<!--/*@thymesVar id="blogForm" type=""*/-->
+						<form class="contact-form bg-white rounded p-5" th:object="${blogForm}" method="post" th:action="@{/csblog/blogs/edit/{blogId}(blogId=${blogForm.id})}" enctype="multipart/form-data">
+							<h4 class="mb-4"><i class="ti-pencil-alt mr-2" ></i>게시글 수정하기</h4>
+
+							<div style="margin-bottom: 20px;">
+								<span style="font-weight: bold;">제목 :</span>
+								<input class="form-control" type="text" th:field="*{title}" placeholder="제목을 입력하세요" style="width: 100%" th:value="${blogForm.title}">
+								<p th:errors="*{title}" style="color: #dc3545">message</p>
+							</div>
+
+							<div style="margin-bottom: 20px;">
+								<span style="font-weight: bold;">내용 :</span>
+								<textarea class="form-control mb-3" th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요" th:value="${blogForm.content}"></textarea>
+								<p th:errors="*{content}" style="color: #dc3545">message</p>
+							</div>
+
+							<span style="font-weight: bold;">사진 :<br></span>
+							<img th:src="@{/csblog/blogs/images/{image}(image=${blogForm.imageName})}" alt="" class="img-fluid rounded mb-2" style="width: 160px;max-height: 120px;">
+
+							<div style="margin-bottom: 20px;">
+								<input class="form-control" type="file" th:field="*{image}" accept="image/gif, image/png, image/jpeg" style="height: 47px;">
+								<p style="color: #dc3545">사진 변경 시 업로드 해주세요</p>
+							</div>
+
+							<div class="text-right">
+								<input class="btn btn-main btn-round-full" type="submit" name="submit-contact" id="submit_contact" value="수정하기" style="font-size: 15px;">
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- footer Start -->
+	<footer th:replace="fragments/footer :: common_footer">
+	</footer>
+   
+    </div>
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+	<div th:replace="fragments/footer :: footer_bottom">
+	</div>
+
+  </body>
+  </html>

@@ -105,7 +105,7 @@
 						</div>
 					</div>
 
-
+					<!--
 					<div class="col-lg-12 mb-5">
 						<div class="posts-nav bg-white p-5 d-lg-flex d-md-flex justify-content-between ">
 							<a class="post-prev align-items-center" href="#">
@@ -127,70 +127,60 @@
 							</a>
 						</div>
 					</div>
-
+					-->
 					<div class="col-lg-12 mb-5">
 						<div class="comment-area card border-0 p-5">
-							<h4 class="mb-4">2 Comments</h4>
-							<ul class="comment-tree list-unstyled">
-								<li class="mb-5">
-									<div class="comment-area-box">
-										<img alt="" src="/megakit-2/images/blog/test1.jpg" class="img-fluid float-left mr-3 mt-2">
+							<th:block th:each="count : ${commentCount}">
+								<h4 class="mb-4" th:text="${count} + ' ' + 'Comments'"></h4>
+							</th:block>
+							<div id="comment-head">
+								<ul class="comment-tree list-unstyled" th:each="comment : ${comments}">
+									<li class="mb-5" th:id="'commentNum'+${comment.id}">
+										<div class="comment-area-box">
+											<img alt="" th:src="@{/csblog/members/images/{image}(image=${blog.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
 
-										<h5 class="mb-1">Philip W</h5>
-										<span>United Kingdom</span>
+											<h5 class="mb-1" th:text="'작성자 : ' + ${comment.member.name}"></h5>
+											<span>&nbsp;</span>
 
-										<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-											<a href="#"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
-											<span class="date-comm">Posted October 7, 2018 </span>
+											<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
+												<a href="#" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
+												<span class="date-comm" th:text="'Posted ' + ${#strings.replace((#strings.substring(comment.createDate,0,16)), 'T', ' ')}"></span>
+											</div>
+
+											<div class="comment-content mt-3">
+												<p th:text="'&nbsp;' + ${comment.content} + ' '"></p>
+											</div>
 										</div>
-
-										<div class="comment-content mt-3">
-											<p>Some consultants are employed indirectly by the client via a consultancy staffing company, a company that provides consultants on an agency basis. </p>
-										</div>
-									</div>
-								</li>
-
-								<li>
-									<div class="comment-area-box">
-										<img alt="" src="/megakit-2/images/blog/test2.jpg" class="mt-2 img-fluid float-left mr-3">
-
-										<h5 class="mb-1">Philip W</h5>
-										<span>United Kingdom</span>
-
-										<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-											<a href="#"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
-											<span class="date-comm">Posted October 7, 2018</span>
-										</div>
-
-										<div class="comment-content mt-3">
-											<p>Some consultants are employed indirectly by the client via a consultancy staffing company, a company that provides consultants on an agency basis. </p>
-										</div>
-									</div>
-								</li>
-							</ul>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 
 					<div class="col-lg-12">
 						<form class="contact-form bg-white rounded p-5" id="comment-form">
-							<h4 class="mb-4">Write a comment</h4>
+							<h4 class="mb-4">댓글 작성하기</h4>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<input class="form-control" type="text" name="name" id="name" placeholder="Name:">
+										<span th:if="${session.loginMember?.id}" th:text="'이름 : ' + ${session.loginMember.name}"></span>
+										<span th:unless="${session.loginMember?.id} != null" th:text="'이름 : '"></span>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<input class="form-control" type="text" name="mail" id="mail" placeholder="Email:">
+										<span th:if="${session.loginMember?.id}" th:text="'이메일 : ' + ${session.loginMember.name}"></span>
+										<span th:unless="${session.loginMember?.id} != null" th:text="'이메일 : '"></span>
 									</div>
 								</div>
 							</div>
 
+							<input type="hidden" name="member_id" id="member_id" th:if="${session.loginMember?.id}" th:value="${session.loginMember.id}">
+							<textarea class="form-control mb-3" name="content" id="content" cols="40" rows="5" placeholder="Comment" th:disabled="!${session.loginMember?.id}"></textarea>
 
-							<textarea class="form-control mb-3" name="comment" id="comment" cols="30" rows="5" placeholder="Comment"></textarea>
-
-							<input class="btn btn-main btn-round-full" type="submit" name="submit-contact" id="submit_contact" value="Submit Message">
+							<input class="btn btn-main btn-round-full" type="submit" name="submit-contact" id="no-submit" th:disabled="!${session.loginMember?.id}" th:if="!${session.loginMember?.id}" th:value="${'로그인 후 작성'}" style="font-size: 20px;">
+<!--							<input class="btn btn-main btn-round-full" type="submit" th:onclick="addComment(${blog.id}, ${session.loginMember?.id})" name="submit-contact" id="submit_contact" th:if="${session.loginMember?.id}" th:value="${'댓글 등록'}" style="font-size: 20px;">-->
+							<button type="button" class="btn btn-main btn-round-full" th:onclick="|addComment(${blog.id}, ${session.loginMember?.id})|" name="submit-contact" id="submit_contact" th:if="${session.loginMember?.id}" th:text="${'댓글 등록'}" style="font-size: 20px;"></button>
 						</form>
 					</div>
 				</div>
@@ -260,4 +250,62 @@ Essential Scripts
 </div>
 
   </body>
+
+<script>
+	function addComment(blogId, memberId){
+		if($('#content').val() == "") {
+			alert("댓글을 작성해 주세요.");
+			$('#content').focus();
+			return;
+		}
+		var data = {
+			blog_id:blogId,
+			member_id:memberId,
+			content:$('#content').val(),
+		}
+
+		$.ajax({
+			url: "/csblog/blogs/comments/addAjax",
+			data: JSON.stringify(data),
+			type:"POST",
+			dataType: "json",
+			contentType: "application/json; charset=UTF-8",
+			error: function(){
+				alert("연결 실패");
+			},
+			success: function(comments){
+				alert('작성되었습니다.');
+				$("#comment-head").children().remove();
+
+				console.log(comments);
+				console.log(comments[1].blog_id);
+
+				var item = "<ul class=\"comment-tree list-unstyled\">";
+				// for(var x=0; x<comments.length; x++) {
+				// 		item += "<li class=\"mb-5\" id=\"commentNum'" + comments[x].id + "\">" +
+				// 					"<div class=\"comment-area-box\">" +
+				// 						"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
+				// 						"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
+				// 						"<span>&nbsp;</span>" +
+				// 						"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">"
+				// 							"<a href=\"#\"><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>" +
+				// 							"<span class=\"date-comm\">Posted " + comments[x].createDate + "</span>" +
+				// 						"</div>" +
+				// 						"<div class=\"comment-content mt-3\">" +
+				// 							"<p>" + comments[x].content + "</p>" +
+				// 						"</div>" +
+				// 					"</div>" +
+				// 				"</li>";
+				// }
+				item += "</ul>";
+
+				$("#comment-head").html(item);
+				$('#content').val("");
+				$('#commentNum' + comments[comments.length-1].id).focus();
+			}
+		});
+	}
+</script>
+
+
   </html>

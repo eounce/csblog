@@ -1,5 +1,6 @@
 package com.induk.csblog.service;
 
+import com.induk.csblog.domain.Blog;
 import com.induk.csblog.domain.Member;
 import com.induk.csblog.domain.UploadFile;
 import com.induk.csblog.dto.JoinForm;
@@ -35,5 +36,10 @@ public class MemberService {
         return memberRepository.findByUid(loginForm.getUid())
                 .filter(m -> m.getPw().equals(loginForm.getPw()))
                 .orElse(null);
+    }
+
+    public Member getMemberById(Long memberId){
+
+        return memberRepository.findById(memberId).orElse(null);
     }
 }

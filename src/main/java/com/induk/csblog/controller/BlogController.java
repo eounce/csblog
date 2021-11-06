@@ -1,11 +1,16 @@
 package com.induk.csblog.controller;
 
 import com.induk.csblog.domain.Blog;
+import com.induk.csblog.domain.Comment;
 import com.induk.csblog.domain.Member;
 import com.induk.csblog.domain.UploadFile;
 import com.induk.csblog.dto.BlogForm;
+import com.induk.csblog.dto.CommentForm;
+import com.induk.csblog.repository.MemberRepository;
 import com.induk.csblog.service.BlogService;
 import com.induk.csblog.service.CategoryService;
+import com.induk.csblog.service.CommentService;
+import com.induk.csblog.service.MemberService;
 import com.induk.csblog.util.FileStore;
 import com.induk.csblog.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -28,8 +35,10 @@ import java.net.MalformedURLException;
 @RequestMapping("/csblog/blogs")
 public class BlogController {
     private final BlogService blogService;
+    private final MemberService memberService;
     private final CategoryService categoryService;
     private final FileStore fileStore;
+    private final CommentService commentService;
 
     @GetMapping("/category/{categoryId}")
     public String listForm(@PathVariable Long categoryId, Model model, @ModelAttribute("searchText") String searchText,
@@ -86,8 +95,32 @@ public class BlogController {
         model.addAttribute("lastBlogList", blogService.lastBlogList());
         model.addAttribute("blog", blogService.getBlogById(blogId));
         model.addAttribute("newLineChar", '\n');
+
+
+        model.addAttribute("comments", commentService.commentList());
+        model.addAttribute("commentCount", commentService.searchByBlogIdCount(blogId));
         return "blog/blog/detailForm";
     }
+    
+    @PostMapping("/comments/addAjax")
+    @ResponseBody
+    public List<Comment> commentAddForm(@RequestBody HashMap<String, Object> map) throws IOException {
+
+        CommentForm commentForm = new CommentForm();
+        commentForm.setContent((String)map.get("content"));
+        commentForm.setBlog(blogService.getBlogById(Long.valueOf(String.valueOf(map.get("blog_id")))));
+        commentForm.setMember(memberService.getMemberById(Long.valueOf(String.valueOf(map.get("blog_id")))));
+
+        commentService.add(commentForm);
+
+        List<Comment> comments = commentService.commentList();
+        for(int x=0; x<comments.size(); x++) {
+            System.out.println("comments.get(x).getMember().getName() = " + comments.get(x).getMember().getName());
+        }
+
+        return comments;
+    }
+
 
     @GetMapping("/edit/{blogId}")
     public String editForm(@PathVariable Long blogId, Model model){

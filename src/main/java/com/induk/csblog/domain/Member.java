@@ -38,4 +38,11 @@ public class Member {
         member.createDate = LocalDate.now();
         return member;
     }
+
+    //== 비즈니스 로직 ==//
+    public void changeMember(String pw, String tel, String profile) {
+        this.pw = pw;
+        this.tel = tel;
+        this.profile = profile;
+    }
 }

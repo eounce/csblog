@@ -32,6 +32,15 @@ public class MemberService {
         return savedMember.getId();
     }
 
+    @Transactional
+    public void update(JoinForm joinForm, Long id, UploadFile uploadFile) {
+        Member member = memberRepository.findById(id).orElse(null);
+
+        if(member != null) {
+            member.changeMember(joinForm.getPw(), joinForm.getTel(), uploadFile.getStoreFileName());
+        }
+    }
+
     public Member login(LoginForm loginForm) {
         return memberRepository.findByUid(loginForm.getUid())
                 .filter(m -> m.getPw().equals(loginForm.getPw()))

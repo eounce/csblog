@@ -27,4 +27,5 @@ public class JoinForm {
     private String studentId;
 
     private MultipartFile profile;
+    private String fileName;
 }

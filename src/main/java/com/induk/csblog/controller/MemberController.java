@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -52,6 +53,43 @@ public class MemberController {
         log.info("saved member id = {}", id);
 
         return "redirect:/csblog/members/login";
+    }
+
+    @GetMapping("/{memberId}/update")
+    public String updateForm(@PathVariable(name = "memberId") Long id, Model model) {
+        Member findMember = memberService.getMemberById(id);
+        JoinForm joinForm = new JoinForm();
+        joinForm.setName(findMember.getName());
+        joinForm.setPw(findMember.getPw());
+        joinForm.setStudentId(findMember.getStudentId());
+        joinForm.setUid(findMember.getUid());
+        joinForm.setTel(findMember.getTel());
+        joinForm.setFileName(findMember.getProfile());
+
+        model.addAttribute("joinForm", joinForm);
+        return "blog/update";
+    }
+
+    @PostMapping("/{memberId}/update")
+    public String updateMember(@PathVariable(name = "memberId") Long id,
+                               @Valid JoinForm joinForm,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) throws IOException {
+        if(bindingResult.hasErrors()) {
+            return "blog/update";
+        }
+
+        UploadFile uploadFile;
+        if(joinForm.getProfile().isEmpty()) {
+            uploadFile = new UploadFile("", joinForm.getFileName());
+        } else {
+            uploadFile = fileStore.storeFile(joinForm.getProfile(), "member");
+        }
+
+        memberService.update(joinForm, id, uploadFile);
+
+        redirectAttributes.addAttribute("id", id);
+        return "redirect:/csblog/members/{id}/update";
     }
 
     @GetMapping("/login")

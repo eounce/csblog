@@ -123,6 +123,7 @@ public class BlogController {
     @ResponseBody
     public List<Comment> commentDelForm(@RequestBody  HashMap<String, Object> map) throws IOException {
 
+        System.out.println(" 1 " + commentService.getCommentById(Long.valueOf(String.valueOf(map.get("commentId")))));
         CommentForm commentForm = CommentForm.commentToCommentForm(commentService.getCommentById(Long.valueOf(String.valueOf(map.get("commentId")))));        System.out.println("2map.get(\"commentId\") = " + map.get("commentId"));
         commentService.del(Long.valueOf(String.valueOf(map.get("commentId"))));
         List<Comment> comments = commentService.commentListByBlogId(commentForm.getBlog().getId());

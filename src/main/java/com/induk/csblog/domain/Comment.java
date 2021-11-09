@@ -28,7 +28,7 @@ public class Comment {
     private Blog blog;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     @JsonManagedReference
     private Member member;

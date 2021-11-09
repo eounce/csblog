@@ -23,6 +23,15 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
+    public List<Comment> commentListByBlogId(Long blog_id){
+        return commentRepository.findByBlog_Id(blog_id);
+    }
+
+    public Comment getCommentById(Long commentId){
+
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
     public Comment findById(Long id){
         return commentRepository.findById(id).orElse(null);
     }
@@ -46,5 +55,13 @@ public class CommentService {
 
         Comment saveComment = commentRepository.save(comment);
         return saveComment.getId();
+    }
+
+    @Transactional
+    public void del(Long commentId){
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        comment.ifPresent(delComment ->{
+            commentRepository.delete(delComment);
+        });
     }
 }

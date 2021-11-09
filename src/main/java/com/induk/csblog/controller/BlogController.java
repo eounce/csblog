@@ -1,12 +1,10 @@
 package com.induk.csblog.controller;
 
-import com.induk.csblog.domain.Blog;
 import com.induk.csblog.domain.Comment;
 import com.induk.csblog.domain.Member;
 import com.induk.csblog.domain.UploadFile;
 import com.induk.csblog.dto.BlogForm;
 import com.induk.csblog.dto.CommentForm;
-import com.induk.csblog.repository.MemberRepository;
 import com.induk.csblog.service.BlogService;
 import com.induk.csblog.service.CategoryService;
 import com.induk.csblog.service.CommentService;
@@ -97,27 +95,38 @@ public class BlogController {
         model.addAttribute("newLineChar", '\n');
 
 
-        model.addAttribute("comments", commentService.commentList());
+        model.addAttribute("comments", commentService.commentListByBlogId(blogId));
         model.addAttribute("commentCount", commentService.searchByBlogIdCount(blogId));
         return "blog/blog/detailForm";
     }
-    
+
     @PostMapping("/comments/addAjax")
     @ResponseBody
-    public List<Comment> commentAddForm(@RequestBody HashMap<String, Object> map) throws IOException {
+    public List<Comment> commentAddForm(@RequestBody  HashMap<String, Object> map) throws IOException {
 
         CommentForm commentForm = new CommentForm();
         commentForm.setContent((String)map.get("content"));
         commentForm.setBlog(blogService.getBlogById(Long.valueOf(String.valueOf(map.get("blog_id")))));
-        commentForm.setMember(memberService.getMemberById(Long.valueOf(String.valueOf(map.get("blog_id")))));
-
+        commentForm.setMember(memberService.getMemberById(Long.valueOf(String.valueOf(map.get("member_id")))));
+        if(map.get("id") != null) {
+            commentForm.setId(Long.valueOf(String.valueOf(map.get("id"))));
+        }
         commentService.add(commentForm);
 
-        List<Comment> comments = commentService.commentList();
-        for(int x=0; x<comments.size(); x++) {
-            System.out.println("comments.get(x).getMember().getName() = " + comments.get(x).getMember().getName());
-        }
+        List<Comment> comments = commentService.commentListByBlogId(Long.valueOf(String.valueOf(map.get("blog_id"))));
+        System.out.println("comments.get(0).getMember().getName() = " + comments.get(0).getMember().getName());
+        
+        return comments;
+    }
 
+    @PostMapping("/comments/delAjax")
+    @ResponseBody
+    public List<Comment> commentDelForm(@RequestBody  HashMap<String, Object> map) throws IOException {
+
+        CommentForm commentForm = CommentForm.commentToCommentForm(commentService.getCommentById(Long.valueOf(String.valueOf(map.get("commentId")))));        System.out.println("2map.get(\"commentId\") = " + map.get("commentId"));
+        commentService.del(Long.valueOf(String.valueOf(map.get("commentId"))));
+        List<Comment> comments = commentService.commentListByBlogId(commentForm.getBlog().getId());
+        System.out.println(comments.size());
         return comments;
     }
 

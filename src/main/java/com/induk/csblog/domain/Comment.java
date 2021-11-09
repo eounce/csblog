@@ -1,10 +1,9 @@
 package com.induk.csblog.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
+import org.apache.tomcat.jni.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,17 +18,28 @@ public class Comment {
     private Long id;
     @Column(length = 1024, nullable = false)
     private String content;
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     private LocalDateTime createDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "blog_id")
+    @JsonManagedReference
+    private Blog blog;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blog_id")
-    @JsonBackReference
-    private Blog blog;
+    @Builder
+    public Comment(String content, LocalDateTime createDate, Blog blog, Member member) {
+        this.content = content;
+        this.createDate = createDate;
+        this.blog = blog;
+        this.member = member;
+    }
 
     public static Comment createComment(String content, Member member, Blog blog){
         Comment comment = new Comment();

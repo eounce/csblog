@@ -130,25 +130,24 @@
 					-->
 					<div class="col-lg-12 mb-5">
 						<div class="comment-area card border-0 p-5">
+							<div id="comment-head">
 							<th:block th:each="count : ${commentCount}">
 								<h4 class="mb-4" th:text="${count} + ' ' + 'Comments'"></h4>
 							</th:block>
-							<div id="comment-head">
 								<ul class="comment-tree list-unstyled" th:each="comment : ${comments}">
 									<li class="mb-5" th:id="'commentNum'+${comment.id}">
 										<div class="comment-area-box">
-											<img alt="" th:src="@{/csblog/members/images/{image}(image=${blog.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
+											<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
 
 											<h5 class="mb-1" th:text="'작성자 : ' + ${comment.member.name}"></h5>
 											<span>&nbsp;</span>
-
 											<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-												<a href="#" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
+												<a href="#content" th:onclick="|editComment(${comment.id}, ${blog.id}, ${session.loginMember?.id})|" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
 												<span class="date-comm" th:text="'Posted ' + ${#strings.replace((#strings.substring(comment.createDate,0,16)), 'T', ' ')}"></span>
 											</div>
 
 											<div class="comment-content mt-3">
-												<p th:text="'&nbsp;' + ${comment.content} + ' '"></p>
+												<p th:id="'content'+${comment.id}" th:text="'&nbsp;' + ${comment.content} + ' '"></p>
 											</div>
 										</div>
 									</li>
@@ -169,7 +168,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<span th:if="${session.loginMember?.id}" th:text="'이메일 : ' + ${session.loginMember.name}"></span>
+										<span th:if="${session.loginMember?.id}" th:text="'이메일 : ' + ${session.loginMember.uid}"></span>
 										<span th:unless="${session.loginMember?.id} != null" th:text="'이메일 : '"></span>
 									</div>
 								</div>
@@ -179,8 +178,9 @@
 							<textarea class="form-control mb-3" name="content" id="content" cols="40" rows="5" placeholder="Comment" th:disabled="!${session.loginMember?.id}"></textarea>
 
 							<input class="btn btn-main btn-round-full" type="submit" name="submit-contact" id="no-submit" th:disabled="!${session.loginMember?.id}" th:if="!${session.loginMember?.id}" th:value="${'로그인 후 작성'}" style="font-size: 20px;">
-<!--							<input class="btn btn-main btn-round-full" type="submit" th:onclick="addComment(${blog.id}, ${session.loginMember?.id})" name="submit-contact" id="submit_contact" th:if="${session.loginMember?.id}" th:value="${'댓글 등록'}" style="font-size: 20px;">-->
-							<button type="button" class="btn btn-main btn-round-full" th:onclick="|addComment(${blog.id}, ${session.loginMember?.id})|" name="submit-contact" id="submit_contact" th:if="${session.loginMember?.id}" th:text="${'댓글 등록'}" style="font-size: 20px;"></button>
+							<div id="comment-btn">
+								<button type="button" class="btn btn-main btn-round-full" th:onclick="|addComment(${blog.id}, ${session.loginMember?.id}, null)|" name="submit-contact" id="submit_contact" th:if="${session.loginMember?.id}" th:text="${'댓글 등록'}" style="font-size: 20px;"></button>
+							</div>
 						</form>
 					</div>
 				</div>
@@ -252,16 +252,18 @@ Essential Scripts
   </body>
 
 <script>
-	function addComment(blogId, memberId){
+	function addComment(blogId, memberId, commentId){
 		if($('#content').val() == "") {
 			alert("댓글을 작성해 주세요.");
 			$('#content').focus();
 			return;
 		}
+
 		var data = {
 			blog_id:blogId,
 			member_id:memberId,
 			content:$('#content').val(),
+			id:commentId
 		}
 
 		$.ajax({
@@ -278,33 +280,118 @@ Essential Scripts
 				$("#comment-head").children().remove();
 
 				console.log(comments);
-				console.log(comments[1].blog_id);
 
-				var item = "<ul class=\"comment-tree list-unstyled\">";
-				// for(var x=0; x<comments.length; x++) {
-				// 		item += "<li class=\"mb-5\" id=\"commentNum'" + comments[x].id + "\">" +
-				// 					"<div class=\"comment-area-box\">" +
-				// 						"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
-				// 						"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
-				// 						"<span>&nbsp;</span>" +
-				// 						"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">"
-				// 							"<a href=\"#\"><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>" +
-				// 							"<span class=\"date-comm\">Posted " + comments[x].createDate + "</span>" +
-				// 						"</div>" +
-				// 						"<div class=\"comment-content mt-3\">" +
-				// 							"<p>" + comments[x].content + "</p>" +
-				// 						"</div>" +
-				// 					"</div>" +
-				// 				"</li>";
-				// }
+				var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
+						"<ul class=\"comment-tree list-unstyled\">";
+				 for(var x=0; x<comments.length; x++) {
+				 		item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
+				 					"<div class=\"comment-area-box\">" +
+				 						"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
+				 						"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
+				 						"<span>&nbsp;</span>" +
+				 						"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">";
+				 						console.log(memberId)
+				 						if(comments[x].member.id == memberId)
+				 							item +=	"<a href=\"#content\" onclick='editComment("+ comments[x].id + ", " + comments[x].blog.id + ", " + comments[x].member.id + ")'><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>";
+
+										item += "<span class=\"date-comm\">Posted " + comments[x].createDate + "</span>" +
+				 						"</div>" +
+				 						"<div class=\"comment-content mt-3\">" +
+				 							"<p id='content"+ comments[x].id +"'>" + comments[x].content + "</p>" +
+				 						"</div>" +
+				 					"</div>" +
+				 				"</li>";
+				 }
 				item += "</ul>";
 
 				$("#comment-head").html(item);
-				$('#content').val("");
-				$('#commentNum' + comments[comments.length-1].id).focus();
+				$("#commentNum" + comments[comments.length-1].id).focus();
+
+				document.getElementById("content").innerText = null;
+				resetComment(blogId, memberId);
 			}
 		});
 	}
+
+	function delComment(commentId, memberId, blogId){
+		var check = confirm("삭제할까요 ?");
+		if (check == true) {
+			var data = {
+				commentId:commentId
+			}
+			$.ajax({
+				url: "/csblog/blogs/comments/delAjax",
+				data: JSON.stringify(data),
+				type:"POST",
+				dataType: "json",
+				contentType: "application/json; charset=UTF-8",
+				error: function(){
+					alert("연결 실패");
+				},
+				success: function (comments) {
+					alert('삭제되었습니다.');
+					$("#comment-head").children().remove();
+
+					console.log(comments);
+
+					var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
+							"<ul class=\"comment-tree list-unstyled\">";
+					for(var x=0; x<comments.length; x++) {
+						item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
+								"<div class=\"comment-area-box\">" +
+								"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
+								"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
+								"<span>&nbsp;</span>" +
+								"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">";
+						if(comments[x].member.id == memberId)
+							item +=	"<a href=\"#content\" onclick='editComment("+ comments[x].id + ", " + comments[x].blog.id + ", " + comments[x].member.id + ")'><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>";
+
+						item += "<span class=\"date-comm\">Posted " + comments[x].createDate + "</span>" +
+								"</div>" +
+								"<div class=\"comment-content mt-3\">" +
+								"<p id='content"+ comments[x].id +"'>" + comments[x].content + "</p>" +
+								"</div>" +
+								"</div>" +
+								"</li>";
+					}
+					item += "</ul>";
+
+					$("#comment-head").html(item);
+					$("#content").focus();
+
+					document.getElementById("content").innerText = null;
+
+					resetComment(blogId, memberId);
+				}
+			});
+		} else if (check == false) {
+			return 0;
+		}
+	}
+
+	function editComment(commentId, blogId, memberId) {
+		document.getElementById("content").value = document.getElementById("content"+commentId).textContent.trim();
+		document.getElementById("content").focus();
+		$("#comment-btn").children().remove();
+		var item = "";
+		item += "<button type=\"button\" class=\"btn btn-main btn-round-full\" onclick=\"addComment(" + blogId + ", " + memberId + ", " + commentId + ")\" name=\"submit-contact\" id=\"submit_contact\" style=\"font-size: 20px;\">댓글 수정</button>" +
+				"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+				"<button type=\"button\" class=\"btn btn-main btn-round-full\" onclick=\"delComment(" + commentId + ", " + memberId +  ", " +  blogId + ")\" name=\"submit-contact\" id=\"submit_contact\" style=\"font-size: 20px;\">댓글 삭제</button>" +
+				"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+				"<button type=\"button\" class=\"btn btn-main btn-round-full\" onclick=\"resetComment(" + blogId + ", " + memberId + ")\" name=\"submit-contact\" id=\"submit_contact\" th:if=\"${session.loginMember?.id}\" style=\"font-size: 20px;\">취소</button>";
+
+		$("#comment-btn").html(item);
+	}
+
+	function resetComment(blogId, memberId) {
+		console.log("reset");
+		$("#content").val('');
+		$("#comment-btn").children().remove();
+		var item = "";
+		item += "<button type=\"button\" class=\"btn btn-main btn-round-full\" onclick=\"addComment(" + blogId + ", " + memberId + ")\" name=\"submit-contact\" id=\"submit_contact\" style=\"font-size: 20px;\">댓글 등록</button>";
+		$("#comment-btn").html(item);
+	}
+
 </script>
 
 

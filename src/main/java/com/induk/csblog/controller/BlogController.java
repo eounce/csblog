@@ -93,10 +93,6 @@ public class BlogController {
         model.addAttribute("lastBlogList", blogService.lastBlogList());
         model.addAttribute("blog", blogService.getBlogById(blogId));
         model.addAttribute("newLineChar", '\n');
-
-
-        model.addAttribute("comments", commentService.commentListByBlogId(blogId));
-        model.addAttribute("commentCount", commentService.searchByBlogIdCount(blogId));
         return "blog/blog/detailForm";
     }
 

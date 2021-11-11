@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -30,6 +32,10 @@ public class Blog {
     @JoinColumn(name = "category_id")
     @JsonBackReference
     private Category category;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    @JsonBackReference
+    List<Comment> comments = new ArrayList<>();
 
     public static Blog createBlog(String title, String content, String image, Member member, Category category){
         Blog blog = new Blog();

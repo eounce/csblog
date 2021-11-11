@@ -22,6 +22,7 @@ public class Comment {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     private LocalDateTime createDate;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "blog_id")
     @JsonManagedReference

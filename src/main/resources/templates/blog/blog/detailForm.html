@@ -131,10 +131,8 @@
 					<div class="col-lg-12 mb-5">
 						<div class="comment-area card border-0 p-5">
 							<div id="comment-head">
-							<th:block th:each="count : ${commentCount}">
-								<h4 class="mb-4" th:text="${count} + ' ' + 'Comments'"></h4>
-							</th:block>
-								<ul class="comment-tree list-unstyled" th:each="comment : ${comments}">
+								<h4 class="mb-4" th:text="${blog.comments.size()} + ' ' + 'Comments'"></h4>
+								<ul class="comment-tree list-unstyled" th:each="comment : ${blog.comments}">
 									<li class="mb-5" th:id="'commentNum'+${comment.id}">
 										<div class="comment-area-box">
 											<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">

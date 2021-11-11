@@ -28,8 +28,7 @@ public class CommentService {
     }
 
     public Comment getCommentById(Long commentId){
-
-        return commentRepository.findById(commentId).orElse(null);
+        return commentRepository.getById(commentId);
     }
 
     public Comment findById(Long id){

@@ -42,12 +42,10 @@
                 </div>
                 <div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
                     <div class="header-top-info" th:if="${session.isEmpty()}">
-                        <a href="tel:+23-345-67890">이름 : <span></span></a>
-                        <a href="mailto:support@gmail.com" ><i class="fa fa-envelope mr-2"></i><span></span></a>
                     </div>
                     <div class="header-top-info" th:unless="${session.isEmpty()}">
-                        <a href="tel:+23-345-67890">이름 : <span th:text="${session.loginMember.name}"></span></a>
-                        <a href="mailto:support@gmail.com" ><i class="fa fa-envelope mr-2"></i><span th:text="${session.loginMember.uid}"></span></a>
+                        <a th:href="'tel:' + ${session.loginMember.tel}">이름 : <span th:text="${session.loginMember.name}"></span></a>
+                        <a th:href="'mailto:' + ${session.loginMember.uid}"><i class="fa fa-envelope mr-2"></i><span th:text="${session.loginMember.uid}"></span></a>
                     </div>
                 </div>
             </div>

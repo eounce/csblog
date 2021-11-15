@@ -287,9 +287,11 @@ Essential Scripts
 				 for(var x=0; x<comments.length; x++) {
 				 		item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
 				 					"<div class=\"comment-area-box\">" +
-				 						"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
+										"<div class='thumbnail-wrapper' style='margin-right: 70px;'>" +
+											"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px;position:relative\">" +
+					 					"</div>" +
 				 						"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
-				 						"<span>&nbsp;</span>" +
+										"<span>학번 :" +comments[x].member.studentId+ "</span>" +
 				 						"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">";
 				 						console.log(memberId)
 				 						if(comments[x].member.id == memberId)
@@ -340,9 +342,11 @@ Essential Scripts
 					for(var x=0; x<comments.length; x++) {
 						item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
 								"<div class=\"comment-area-box\">" +
-								"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px\">" +
+								"<div class='thumbnail-wrapper' style='margin-right: 70px;'>" +
+									"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px;position:relative\">" +
+								"</div>" +
 								"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
-								"<span>&nbsp;</span>" +
+								"<span>학번 :" +comments[x].member.studentId+ "</span>" +
 								"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">";
 						if(comments[x].member.id == memberId)
 							item +=	"<a href=\"#content\" onclick='editComment("+ comments[x].id + ", " + comments[x].blog.id + ", " + comments[x].member.id + ")'><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>";

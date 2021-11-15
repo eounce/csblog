@@ -80,9 +80,9 @@
 
 							<div class="blog-item-content bg-white p-5">
 								<div class="blog-item-meta bg-gray py-1 px-2">
-									<span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i>Creativity</span>
-									<span class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i>5 Comments</span>
-									<span class="text-black text-capitalize mr-3"><i class="ti-time mr-1"></i> 28th January</span>
+									<span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i><th:block  th:text="' ' + ${blog.category.name}"></th:block></span>
+									<span class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i><th:block  th:text="' ' + ${blog.comments.size()} + '개'"></th:block></span>
+									<span class="text-black text-capitalize mr-3"><i class="ti-time mr-1"></i><th:block  th:text="' ' + ${(blog.getBetweenToday().getSeconds()/86400 > 0)? blog.getBetweenToday().getSeconds()/86400 + '일 전': '오늘'}"></th:block></span>
 								</div>
 
 								<h2 class="mt-3 mb-4"><a th:text="${blog.title}" style="line-break: anywhere"></a></h2>
@@ -135,10 +135,11 @@
 								<ul class="comment-tree list-unstyled" th:each="comment : ${blog.comments}">
 									<li class="mb-5" th:id="'commentNum'+${comment.id}">
 										<div class="comment-area-box">
-											<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
-
-											<h5 class="mb-1" th:text="'작성자 : ' + ${comment.member.name}"></h5>
-											<span>&nbsp;</span>
+											<div class="thumbnail-wrapper" style="margin-right: 70px;">
+												<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px;position: relative">
+											</div>
+											<h5 class="mb-1" th:text="'작성자: ' + ${comment.member.name}"></h5>
+											<span th:text="'학번: ' + ${comment.member.studentId}">학번 : </span>
 											<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
 												<a href="#content" th:onclick="|editComment(${comment.id}, ${blog.id}, ${session.loginMember?.id})|" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
 												<span class="date-comm" th:text="'Posted ' + ${#strings.replace((#strings.substring(comment.createDate,0,16)), 'T', ' ')}"></span>
@@ -195,7 +196,9 @@
 						<h5>최근 작성된 게시글</h5>
 						<th:block th:each="blog : ${lastBlogList}">
 							<div class="media border-bottom py-3">
-								<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}"><img class="mr-4" th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" style="width: 87px;height: 72px;"></a>
+								<div class="thumbnail-wrapper" style="margin-right: 100px;">
+									<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}"><img class="mr-4" th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" style="width: 87px;height: 72px;"></a>
+								</div>
 								<div class="media-body">
 									<h6 class="my-2"><a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}" th:text="${blog.title}" style="display: -webkit-box;-webkit-box-orient: vertical;line-break: anywhere;-webkit-line-clamp:2;overflow: hidden;"></a></h6>
 									<span class="text-sm text-muted" th:text="${#strings.substring(blog.createDate,0,10)}"></span>

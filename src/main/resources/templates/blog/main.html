@@ -36,16 +36,16 @@
             <div class="col-lg-8">
 				<div class="row">
 					<div class="col-lg-6 text-left" style="margin-top: 13px;">
-						<h5 style="font-weight: 800"><i class="fas fa-clipboard-list"></i>전체게시판</h5>
+						<h5 style="font-weight: 800"><i class="fas fa-clipboard-list"></i> 전체게시판</h5>
 					</div>
 				</div>
 				<hr>
-                <div class="row">
+				<div class="row">
 					<div class="col-lg-6 col-md-6 mb-5" th:each="blog : ${blogList}">
 						<div class="blog-item">
 							<div class="img-wrapper">
 								<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}">
-									<img th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" class="img-fluid rounded" style="width: 100%;height: 250px;">
+									<img th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" class="img-fluid rounded" style="width: 100%;height: 250px;border-bottom: 2px solid rgba(0, 0, 0, 0.05)">
 								</a>
 							</div>
 							<div class="blog-item-content bg-white p-4">
@@ -54,8 +54,9 @@
 
 								<hr class="mb-1">
 								<div class="comment-area-box">
-									<img alt="" th:src="@{/csblog/members/images/{image}(image=${blog.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px">
-
+									<div class="thumbnail-wrapper">
+										<img alt="" th:src="@{/csblog/members/images/{image}(image=${blog.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px;position:relative">
+									</div>
 									<span th:text="${blog.member.name}" style="font-weight: bold"></span>
 
 									<div class="comment-meta mt-4 mt-lg-0 mt-md-0">
@@ -80,8 +81,10 @@
 					<div class="sidebar-widget latest-post card border-0 p-4 mb-3">
 						<h5>최근 작성된 게시글</h5>
 						<th:block th:each="blog : ${lastBlogList}">
-							<div class="media border-bottom py-3"><span></span>
-								<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}"><img class="mr-4" th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" style="width: 87px;height: 72px;"></a>
+							<div class="media border-bottom py-3">
+								<div class="thumbnail-wrapper" style="margin-right: 100px;">
+									<a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}"><img class="mr-4" th:src="@{/csblog/blogs/images/{image}(image=${blog.image})}" alt="" style="width: 87px;height: 72px;"></a>
+								</div>
 								<div class="media-body">
 									<h6 class="my-2"><a th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id})}" th:text="${blog.title}" style="display: -webkit-box;-webkit-box-orient: vertical;line-break: anywhere;-webkit-line-clamp:2;overflow: hidden;"></a></h6>
 									<span class="text-sm text-muted" th:text="${#strings.replace((#strings.substring(blog.createDate,0,16)), 'T', ' ')}"></span>

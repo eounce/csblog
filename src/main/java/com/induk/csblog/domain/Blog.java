@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -46,5 +49,9 @@ public class Blog {
         blog.category = category;
         blog.createDate = LocalDateTime.now();
         return blog;
+    }
+    public Duration getBetweenToday(){
+        Duration duration = Duration.between(createDate, LocalDateTime.now());
+        return duration;
     }
 }

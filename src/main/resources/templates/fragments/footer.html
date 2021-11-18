@@ -2,7 +2,12 @@
 <footer class="footer section" th:fragment="common_footer">
     <div class="container">
         <div class="row">
-            <div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="col-lg-1 col-md-6 col-sm-6">
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget" id="categoryFooterList">
+
+                </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="widget">
@@ -114,7 +119,30 @@
                             }
                         }
                     }
+
+                    var footerCategorys = "";
+                    footerCategorys += "<h4 className='text-capitalize mb-4'>Category</h4>" +
+                                        "<ul className='list-unstyled footer-menu lh-35'>";
+
+
+                    for(var i=0; i<categorys.length;i++){
+                        if(categorys[i].categoryId == 0) {
+                            var boxTrue = false;
+                            for(var j=0; j<categorys.length;j++){
+                                if(categorys[i].id == categorys[j].categoryId){
+                                    boxTrue = true;
+                                    break;
+                                }
+                            }
+                            if(!boxTrue){
+                                footerCategorys += "<li><a href='/csblog/blogs/category/" + categorys[i].id + "'>" + categorys[i].name + "</a></li>"
+                            }
+                        }
+                    }
+                    footerCategorys += "</ul>"
+
                     document.querySelector("#categoryList").innerHTML += afterHtml;
+                    document.querySelector("#categoryFooterList").innerHTML += footerCategorys;
                     //$('#categoryList').innerHTML += afterHtml;
                 }
             });

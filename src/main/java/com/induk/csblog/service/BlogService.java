@@ -4,6 +4,7 @@ import com.induk.csblog.domain.Blog;
 import com.induk.csblog.domain.UploadFile;
 import com.induk.csblog.dto.BlogForm;
 import com.induk.csblog.repository.BlogRepository;
+import com.induk.csblog.repository.CommentRepository;
 import com.induk.csblog.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class BlogService {
     private final BlogRepository blogRepository;
+    private final CommentRepository commentRepository;
 
     public List<Blog> searchByBlogTitle(Long categoryId,String searchText, PaginationInfo paginationInfo){
         PageRequest pageRequest = PageRequest.of(paginationInfo.getCurrentPageNo()-1, paginationInfo.getRecordsPerPage());
@@ -33,6 +35,11 @@ public class BlogService {
     public Long searchByBlogTitleCount(Long categoryId, String searchText){
         return blogRepository.countByCategoryIdAndTitleContaining(categoryId, searchText);
     }
+    public Long searchByCommentCount(Long blogId){
+        return commentRepository.countByBlogId(blogId);
+    }
+
+
     public Long searchByBlogTitleCount(String searchText){
         return blogRepository.countByTitleContaining(searchText);
     }

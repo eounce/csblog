@@ -42,7 +42,7 @@ public class BlogController {
     public String listForm(@PathVariable Long categoryId, Model model, @ModelAttribute("searchText") String searchText,
                            @RequestParam(value = "page", defaultValue = "1") String page) {
         //페이즈당 레코드 개수, 페이즈 갯수
-        PaginationInfo paginationInfo = new PaginationInfo(Integer.parseInt(page), 4, 5);
+//        PaginationInfo paginationInfo = new PaginationInfo(Integer.parseInt(page), 1, 2);
         paginationInfo.setTotalRecordCount(blogService.searchByBlogTitleCount(categoryId,searchText).intValue());
 
         model.addAttribute("lastBlogList", blogService.lastBlogList());
@@ -88,11 +88,19 @@ public class BlogController {
     }
 
     @GetMapping("/{blogId}")
-    public String detailForm(@PathVariable Long blogId, Model model){
+    public String detailForm(@PathVariable Long blogId, Model model,
+                             @RequestParam(value = "page", defaultValue = "1") String page){
+        //페이즈당 레코드 개수, 페이즈 갯수
+     //   PaginationInfo paginationInfo = new PaginationInfo(Integer.parseInt(page), 5, 5);
+    //    paginationInfo.setTotalRecordCount(blogService.searchByCommentCount(blogId).intValue());
 
+
+      //  model.addAttribute("page", paginationInfo);
         model.addAttribute("lastBlogList", blogService.lastBlogList());
         model.addAttribute("blog", blogService.getBlogById(blogId));
         model.addAttribute("newLineChar", '\n');
+   //     log.info("\n\n\n\n\n전체 댓글 수 : " + paginationInfo.getTotalRecordCount());
+  //      log.info("\n\n\n\n\n마지막 페이지 : " + paginationInfo.getRecordsPerPage());
         return "blog/blog/detailForm";
     }
 

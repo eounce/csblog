@@ -46,7 +46,8 @@ public class BlogController {
         paginationInfo.setTotalRecordCount(blogService.searchByBlogTitleCount(categoryId,searchText).intValue());
 
         model.addAttribute("lastBlogList", blogService.lastBlogList());
-        model.addAttribute("blogList", blogService.searchByBlogTitle(categoryId,searchText, paginationInfo));
+
+        model.addAttribute("blogList", blogService.searchByBlogTitle(categoryId, searchText, paginationInfo));
         model.addAttribute("newLineChar", '\n');
         model.addAttribute("category", categoryService.findById(categoryId));
         model.addAttribute("page", paginationInfo);

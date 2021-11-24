@@ -38,7 +38,8 @@ public class BlogService {
     }
 
     public List<Blog> lastBlogList(){
-        return blogRepository.findTop5ByOrderByCreateDateDesc();
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        return blogRepository.findTop5ByOrderByCreateDateDesc(pageRequest);
     }
 
     public Blog getBlogById(Long blogId){

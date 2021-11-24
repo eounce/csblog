@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,7 +15,8 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String uid;
     private String pw;
@@ -23,6 +25,8 @@ public class Member {
     private String studentId;
     private String profile;
     private LocalDate createDate;
+    @ColumnDefault("0")
+    private int admin;
 
     //== 생성 메서드 ==//
     public static Member createMember(String uid, String pw,

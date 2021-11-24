@@ -92,10 +92,10 @@
                 success: function (categorys){
                     var afterHtml = "";
                     for(var i=0; i<categorys.length;i++){
-                        if(categorys[i].categoryId == 0) {
+                        if(categorys[i].superCategory == null) {
                             var boxTrue = false;
                             for(var j=0; j<categorys.length;j++){
-                                if(categorys[i].id == categorys[j].categoryId){
+                                if(categorys[j].superCategory != null && categorys[i].id == categorys[j].superCategory.id){
                                     boxTrue = true;
                                     break;
                                 }
@@ -107,7 +107,7 @@
                                     "                                   aria-haspopup='true' aria-expanded='false'>" + categorys[i].name + "</a>" +
                                     "<ul class=\'dropdown-menu\' aria-labelledby=\'dropdown" +categorys[i].id+ "\'>";
                                 for(var j=0; j<categorys.length;j++){
-                                    if(categorys[j].categoryId == (categorys[i].id)){
+                                    if(categorys[j].superCategory !=null && categorys[j].superCategory.id == (categorys[i].id)){
                                         afterHtml += "<li><a class='dropdown-item' href='/csblog/blogs/category/" +categorys[j].id+ "'>" +categorys[j].name + "</a></li>";
                                     }
                                 }
@@ -122,21 +122,19 @@
 
                     var footerCategorys = "";
                     footerCategorys += "<h4 class='text-capitalize mb-4'>Category</h4>" +
-                                        "<ul class='list-unstyled footer-menu lh-35'>";
+                        "<ul class='list-unstyled footer-menu lh-35'>";
 
 
                     for(var i=0; i<categorys.length;i++){
-                        if(categorys[i].categoryId == 0) {
-                            var boxTrue = false;
-                            for(var j=0; j<categorys.length;j++){
-                                if(categorys[i].id == categorys[j].categoryId){
-                                    boxTrue = true;
-                                    break;
-                                }
+                        var boxTrue = false;
+                        for(var j=0; j<categorys.length;j++){
+                            if(categorys[j].superCategory != null && categorys[i].id == categorys[j].superCategory.id){
+                                boxTrue = true;
+                                break;
                             }
-                            if(!boxTrue){
-                                footerCategorys += "<li><a href='/csblog/blogs/category/" + categorys[i].id + "'>" + categorys[i].name + "</a></li>"
-                            }
+                        }
+                        if(!boxTrue){
+                            footerCategorys += "<li><a href='/csblog/blogs/category/" + categorys[i].id + "'>" + categorys[i].name + "</a></li>"
                         }
                     }
                     footerCategorys += "</ul>"

@@ -1,0 +1,97 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title})">
+	<title>블로그</title>
+</head>
+
+
+<body>
+
+<!-- Header Start -->
+<header th:replace="fragments/header :: navigation">
+</header>
+<!-- Header Close --> 
+
+<div class="main-wrapper ">
+<section class="page-title bg-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block text-center">
+          <span class="text-white">컴소 블로그</span>
+			<h1 class="text-capitalize mb-4 text-lg">메뉴 수정</h1>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="/csblog" class="text-white">홈</a></li>
+            <li class="list-inline-item"><span class="text-white">/</span></li>
+            <li class="list-inline-item"><a href="#" class="text-white-50">메뉴 수정</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section blog-wrap bg-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8">
+				<div class="row">
+					<div class="col-lg-12">
+						<!--/*@thymesVar id="blogForm" type=""*/-->
+						<form class="contact-form bg-white rounded p-5" th:object="${categoryForm}" method="post" th:action="@{/csblog/category/edit/{categoryId}(categoryId=${categoryForm.id})}">
+							<h4 class="mb-4"><i class="ti-pencil-alt mr-2"></i>메뉴 수정하기</h4>
+
+							<div style="margin-bottom: 20px;">
+								<span style="font-weight: bold;">이름 :</span>
+								<input class="form-control" type="text" th:field="*{name}" placeholder="이름을 입력하세요" style="width: 100%">
+								<p th:errors="*{name}" style="color: #dc3545">message</p>
+							</div>
+
+							<div style="margin-bottom: 20px;">
+								<span style="font-weight: bold;">상위카테고리 :</span>
+								<select class="form-control mb-3" th:field="*{categoryId}">
+									<th:block th:unless="${superYN}">
+										<option value="0">없음</option>
+										<th:block th:each="category : ${categoryList}">
+											<option th:if="${categoryForm.categoryId == category.id}" th:value="${category.id}" th:text="${category.name}" selected></option>
+											<option th:if="${categoryForm.categoryId != category.id && category.superCategory==null && categoryForm.id != category.id}" th:value="${category.id}" th:text="${category.name}"></option>
+										</th:block>
+									</th:block>
+									<th:block th:if="${superYN}">
+										<option value="0">상위카테고리는 선택할 수 없습니다.</option>
+									</th:block>
+								</select>
+								<p th:errors="*{categoryId}" style="color: #dc3545">message</p>
+							</div>
+
+							<div class="text-right">
+								<input class="btn btn-main btn-round-full" type="submit" name="submit-contact" id="submit_contact" value="수정하기" style="font-size: 15px;">
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- footer Start -->
+	<footer th:replace="fragments/footer :: common_footer">
+	</footer>
+   
+    </div>
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+	<div th:replace="fragments/footer :: footer_bottom">
+	</div>
+
+  </body>
+  </html>

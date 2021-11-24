@@ -1,0 +1,113 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title})">
+	<title>블로그</title>
+</head>
+
+
+<body>
+
+<!-- Header Start -->
+<header th:replace="fragments/header :: navigation">
+</header>
+<!-- Header Close --> 
+
+<div class="main-wrapper ">
+<section class="page-title bg-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block text-center">
+          <span class="text-white">컴소 블로그</span>
+			<h1 class="text-capitalize mb-4 text-lg">메뉴 수정</h1>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="/csblog" class="text-white">홈</a></li>
+            <li class="list-inline-item"><span class="text-white">/</span></li>
+            <li class="list-inline-item"><a href="#" class="text-white-50">메뉴 수정</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section blog-wrap bg-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8">
+				<div class="row">
+					<div class="col-lg-12">
+						<!--/*@thymesVar id="blogForm" type=""*/-->
+						<div class="contact-form bg-white rounded p-5">
+							<div class="row">
+								<div class="col-6">
+									<h4 class="mb-4" style="margin-top: 12px;"><i class="fas fa-bars"></i> 메뉴 수정</h4>
+								</div>
+								<div class="col-6 text-right">
+									<a href="/csblog/category/add" class="btn btn-small btn-main btn-round-full" style="font-size:15px;">
+										<i class="ti-pencil-alt mr-2"></i> 추가하기
+									</a>
+								</div>
+							</div>
+							<table class="table text-center">
+								<thead>
+									<tr>
+										<th width="15%">Id</th>
+										<th width="35%">이름</th>
+										<th width="35%">상위카테고리</th>
+										<th width="15"></th>
+									</tr>
+								</thead>
+								<th:block th:each="category : ${categoryList}">
+									<tr>
+										<td th:text="${category.id}"></td>
+										<td><a th:href="@{/csblog/category/edit/{categoryId}(categoryId=${category.id})}" th:text="${category.name}"></a></td>
+										<td th:if="${category.superCategory == null}">없음</td>
+										<td th:unless="${category.superCategory == null}" th:text="${category.superCategory.name}"></td>
+										<td><a href="#" th:onclick="deleteCategory([[ ${category.id} ]])">삭제</a></td>
+									</tr>
+								</th:block>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- footer Start -->
+	<footer th:replace="fragments/footer :: common_footer">
+	</footer>
+   <script>
+	   function deleteCategory(idx) {
+
+		   if (confirm("삭제 시, 하위카테고리와 모든 글이 삭제됩니다.\n삭제하시겠습니까?")) {
+			   var uri = "/csblog/category/del/" + idx;
+			   var html = "";
+
+			   html += '<form name="delForm" action="'+uri+'" method="post">';
+			   html += '<input type="hidden" name="idx" value="'+idx+'" />';
+			   html += '</form>';
+
+			   $("body").append(html);
+			   document.delForm.submit();
+		   }
+	   }
+   </script>
+
+    </div>
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+	<div th:replace="fragments/footer :: footer_bottom">
+	</div>
+
+  </body>
+  </html>

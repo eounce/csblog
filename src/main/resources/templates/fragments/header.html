@@ -70,6 +70,9 @@
                         <a th:if="${session.isEmpty()}" class="nav-link" href="/csblog/members/join">회원가입</a>
                         <a th:unless="${session.isEmpty()}" class="nav-link" th:href="@{|/csblog/members/${session.loginMember.id}/update|}">정보변경</a>
                     </li>
+                    <li class="nav-item" th:if="${!session.isEmpty() && session.loginMember.admin ==1}">
+                        <a class="nav-link" href="/csblog/category/">메뉴 수정</a>
+                    </li>
                 </ul>
 
                 <form th:if="${session.isEmpty()}" class="form-lg-inline my-2 my-md-0 ml-lg-4 text-center">

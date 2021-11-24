@@ -132,29 +132,57 @@
 						<div class="comment-area card border-0 p-5">
 							<div id="comment-head">
 								<h4 class="mb-4" th:text="${blog.comments.size()} + ' ' + 'Comments'"></h4>
-								<ul class="comment-tree list-unstyled" th:each="comment : ${blog.comments}">
-									<li class="mb-5" th:id="'commentNum'+${comment.id}">
-										<div class="comment-area-box">
-											<div class="thumbnail-wrapper" style="margin-right: 70px;">
-												<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px;position: relative">
-											</div>
-											<h5 class="mb-1" th:text="'작성자: ' + ${comment.member.name}"></h5>
-											<span th:text="'학번: ' + ${comment.member.studentId}">학번 : </span>
-											<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-												<a href="#content" th:onclick="|editComment(${comment.id}, ${blog.id}, ${session.loginMember?.id})|" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
-												<span class="date-comm" th:text="'Posted ' + ${#strings.replace((#strings.substring(comment.createDate,0,16)), 'T', ' ')}"></span>
-											</div>
+								<div id="comment-body">
+									<ul class="comment-tree list-unstyled" th:each="comment : ${comments}">
+										<li class="mb-5" th:id="'commentNum'+${comment.id}">
+											<div class="comment-area-box">
+												<div class="thumbnail-wrapper" style="margin-right: 70px;">
+													<img alt="" th:src="@{/csblog/members/images/{image}(image=${comment.member.profile})}" class="img-fluid float-left mr-3 mt-2" style="width: 40px;height: 40px;position: relative">
+												</div>
+												<h5 class="mb-1" th:text="'작성자: ' + ${comment.member.name}"></h5>
+												<span th:text="'학번: ' + ${comment.member.studentId}">학번 : </span>
+												<div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
+													<a href="#content" th:onclick="|editComment(${comment.id}, ${blog.id}, ${session.loginMember?.id})|" th:if="${session.loginMember?.id == comment.member.id}"><i class="icofont-reply mr-2 text-muted"></i>수정 |</a>
+													<span class="date-comm" th:text="'Posted ' + ${#strings.replace((#strings.substring(comment.createDate,0,16)), 'T', ' ')}"></span>
+												</div>
 
-											<div class="comment-content mt-3">
-												<p th:id="'content'+${comment.id}" th:text="'&nbsp;' + ${comment.content} + ' '"></p>
+												<div class="comment-content mt-3">
+													<p th:id="'content'+${comment.id}" th:text="'&nbsp;' + ${comment.content} + ' '"></p>
+												</div>
 											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="row mt-5">
+								<div class="col-lg-12 text-center">
+									<nav class="navigation pagination py-2 d-inline-block">
+										<div class="nav-links" id="comment-paging">
+											<a th:if="${page.hasPreviousPage}" class="prev page-numbers" href="javascript:;"
+											   th:onclick="|loadComment(${blog.id}, ${page.firstPage - 1}, ${session.loginMember?.id})|">Prev</a>
+											<th:block th:each="p: ${#numbers.sequence(page.firstPage, page.lastPage)}">
+												<th:block th:if="${page.currentPageNo == p}">
+													<span aria-current="page" class="page-numbers current">
+														<span th:text="${p}"></span>
+													</span>
+												</th:block>
+												<th:block th:unless="${page.currentPageNo == p}">
+													<a class="page-numbers" href="javascript:;"
+													   th:onclick="|loadComment(${blog.id}, ${p}, ${session.loginMember?.id})|">
+														<span th:text="${p}"></span>
+													</a>
+												</th:block>
+											</th:block>
+<!--											<a th:if="${page.hasNextPage}" class="next page-numbers"-->
+<!--											   th:href="@{/csblog/blogs/{blogId}(blogId=${blog.id}, page=${page.firstPage + 1})}">Next</a>-->
+											<a th:if="${page.hasNextPage}" class="next page-numbers" href="javascript:;"
+											   th:onclick="|loadComment(${blog.id}, ${page.lastPage + 1}, ${session.loginMember?.id})|">Next</a>
 										</div>
-									</li>
-								</ul>
+									</nav>
+								</div>
 							</div>
 						</div>
-					</div>
-
+						</div>
 					<div class="col-lg-12">
 						<form class="contact-form bg-white rounded p-5" id="comment-form">
 							<h4 class="mb-4">댓글 작성하기</h4>
@@ -210,27 +238,27 @@
 						<h5 class="mb-4">Follow Us</h5>
 						<ul class="list-inline author-socials text-center" >
 							<li class="list-inline-item mr-3">
-								<a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f text-muted"></i></a>
+								<a href="https://ko-kr.facebook.com/pg/indukadpr/posts/?ref=page_internal" target="_blank"><i class="fab fa-facebook-f text-muted"></i></a>
 							</li>
 							<li class="list-inline-item mr-3">
-								<a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter text-muted"></i></a>
+								<a href="https://twitter.com/induklibrary" target="_blank"><i class="fab fa-twitter text-muted"></i></a>
 							</li>
 							<li class="list-inline-item mr-3">
-								<a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram text-muted"></i></a>
+								<a href="https://www.instagram.com/explore/tags/%EC%9D%B8%EB%8D%95%EB%8C%80/" target="_blank"><i class="fab fa-instagram text-muted"></i></a>
 							</li>
 							<li class="list-inline-item mr-3">
-								<a href="https://www.pinterest.co.kr/" target="_blank"><i class="fab fa-pinterest text-muted"></i></a>
+								<a href="https://www.induk.ac.kr/KR/intro.do" target="_blank"><i class="fab fa-pinterest text-muted"></i></a>
 							</li>
 							<li class="list-inline-item mr-3">
 								<a href="https://www.behance.net/" target="_blank"><i class="fab fa-behance text-muted"></i></a>
 							</li>
 							<li class="list-inline-item mr-3">
-								<a href="https://www.google.com/" target="_blank"><i class="fab fa-google text-muted"></i></a>
+								<a href="https://www.google.com/search?q=%EC%9D%B8%EB%8D%95%EB%8C%80&sxsrf=AOaemvIo3_-fqAzF7mRIaV9krwfjKgIRkA%3A1637148400689&ei=8OaUYeTUKYH7wAOfsaTADg&oq=%EC%9D%B8%EB%8D%95%EB%8C%80&gs_lcp=Cgdnd3Mtd2l6EAMyBAgjECcyBAguECcyBAgjECcyBAgAEEMyBQgAEIAEMgQIABBDMgQIABBDMgQIABBDMgUIABCABDIFCAAQgAQ6DQgAEIAEEIcCELEDEBQ6DgguEIAEELEDEMcBENEDOggIABCABBCxAzoLCC4QgAQQxwEQ0QM6CwgAEIAEELEDEIMBOgsILhCABBDHARCvAUoECEEYAFAAWNYFYJ8HaABwAHgAgAGCAYgBlweSAQMwLjiYAQCgAQHAAQE&sclient=gws-wiz&ved=0ahUKEwjkjPiGpZ_0AhWBPXAKHZ8YCegQ4dUDCA4&uact=5" target="_blank"><i class="fab fa-google text-muted"></i></a>
 							</li>
 						</ul>
 					</div>
 				</div>
-            </div>   
+            </div>
         </div>
     </div>
 </section>
@@ -283,8 +311,17 @@ Essential Scripts
 				console.log(comments);
 
 				var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
-						"<ul class=\"comment-tree list-unstyled\">";
-				 for(var x=0; x<comments.length; x++) {
+						"<ul class=\"comment-tree list-unstyled\">"+
+						"<div id=\"comment-body\">";
+
+				var total = 0;
+				if(comments.length <= 5) {
+					total = comments.length;
+				} else {
+					total = 5;
+				}
+
+				 for(var x=0; x<total; x++) {
 				 		item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
 				 					"<div class=\"comment-area-box\">" +
 										"<div class='thumbnail-wrapper' style='margin-right: 70px;'>" +
@@ -305,13 +342,15 @@ Essential Scripts
 				 					"</div>" +
 				 				"</li>";
 				 }
-				item += "</ul>";
+				item += "</div></ul>";
 
 				$("#comment-head").html(item);
 				$("#commentNum" + comments[comments.length-1].id).focus();
 
 				document.getElementById("content").innerText = null;
 				resetComment(blogId, memberId);
+
+				commentPaging(blogId, 1, memberId);
 			}
 		});
 	}
@@ -338,8 +377,17 @@ Essential Scripts
 					console.log(comments);
 
 					var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
-							"<ul class=\"comment-tree list-unstyled\">";
-					for(var x=0; x<comments.length; x++) {
+							"<ul class=\"comment-tree list-unstyled\">"+
+							"<div id=\"comment-body\">";
+
+					var total = 0;
+					if(comments.length <= 5) {
+						total = comments.length;
+					} else {
+						total = 5;
+					}
+
+					for(var x=0; x<total; x++) {
 						item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
 								"<div class=\"comment-area-box\">" +
 								"<div class='thumbnail-wrapper' style='margin-right: 70px;'>" +
@@ -359,7 +407,7 @@ Essential Scripts
 								"</div>" +
 								"</li>";
 					}
-					item += "</ul>";
+					item += "</div></ul>";
 
 					$("#comment-head").html(item);
 					$("#content").focus();
@@ -386,6 +434,106 @@ Essential Scripts
 				"<button type=\"button\" class=\"btn btn-main btn-round-full\" onclick=\"resetComment(" + blogId + ", " + memberId + ")\" name=\"submit-contact\" id=\"submit_contact\" th:if=\"${session.loginMember?.id}\" style=\"font-size: 20px;\">취소</button>";
 
 		$("#comment-btn").html(item);
+	}
+
+	function loadComment(blogId, page, memberId) {
+		var data = {
+			blog_id:blogId,
+			page:page
+		}
+
+		$.ajax({
+			url: "/csblog/blogs/comments/loadcomments",
+			data: JSON.stringify(data),
+			type:"POST",
+			dataType: "json",
+			contentType: "application/json; charset=UTF-8",
+			error: function(){
+				alert("연결 실패");
+			},
+			success: function(comments){
+				$("#comment-body").children().remove();
+				console.log(comments);
+
+				var item = "<ul class=\"comment-tree list-unstyled\">";
+
+				for(var x=0; x<comments.length; x++) {
+					item += "<li class=\"mb-5\" id=\"commentNum" + comments[x].id + "\">" +
+							"<div class=\"comment-area-box\">" +
+							"<div class='thumbnail-wrapper' style='margin-right: 70px;'>" +
+							"<img alt=\"\" src=\"/csblog/members/images/" + comments[x].member.profile + "\" class=\"img-fluid float-left mr-3 mt-2\" style=\"width: 40px;height: 40px;position:relative\">" +
+							"</div>" +
+							"<h5 class=\"mb-1\">작성자 : " + comments[x].member.name + "</h5>" +
+							"<span>학번 :" +comments[x].member.studentId+ "</span>" +
+							"<div class=\"comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right\">";
+					if(comments[x].member.id == memberId)
+						item +=	"<a href=\"#content\" onclick='editComment("+ comments[x].id + ", " + comments[x].blog.id + ", " + comments[x].member.id + ")'><i class=\"icofont-reply mr-2 text-muted\"></i>수정 |</a>";
+
+					item += "<span class=\"date-comm\">Posted " + comments[x].createDate + "</span>" +
+							"</div>" +
+							"<div class=\"comment-content mt-3\">" +
+							"<p id='content"+ comments[x].id +"'>" + comments[x].content + "</p>" +
+							"</div>" +
+							"</div>" +
+							"</li>";
+				}
+				item += "</ul>";
+
+				$("#comment-body").html(item);
+			}
+		});
+		commentPaging(blogId, page, memberId);
+	}
+
+	function commentPaging(blogId, page, memberId) {
+		var data = {
+			blog_id:blogId,
+			page:page
+		}
+		$.ajax({
+			url: "/csblog/blogs/comments/commentPaging",
+			data: JSON.stringify(data),
+			type:"POST",
+			dataType: "json",
+			contentType: "application/json; charset=UTF-8",
+			error: function(){
+				alert("연결 실패");
+			},
+			success: function(page){
+				$("#comment-paging").children().remove();
+				console.log(page);
+				var item = "";
+
+				if(page.hasPreviousPage) {
+					item += "<a class=\"prev page-numbers\" href=\"javascript:;\" onclick=\"loadComment(" + blogId + ", " + (page.firstPage-1) + ", " + memberId + ")\">Prev</a>"
+				}
+
+				var check = page.firstPage;
+
+				for(var x = 0; x< page.pageSize; x++) {
+					if(check == page.currentPageNo) {
+						console.log(x);
+						item += "<span aria-current=\"page\" class=\"page-numbers current\">\n" +
+									"<span>" + check + "</span>\n" +
+								"</span>"
+					} else {
+						item += "<a class=\"page-numbers\" href=\"javascript:;\"\n" +
+								"onclick=\"loadComment(" + blogId + ", " + check + ", " + memberId + ")\">\n" +
+									"<span>" + check + "</span>\n" +
+								"</a>"
+					}
+					if(check == page.lastPage) {
+						break;
+					}
+					check += 1;
+				}
+				if(page.hasNextPage) {
+					item += "<a class=\"prev page-numbers\" href=\"javascript:;\" onclick=\"loadComment(" + blogId + ", " + (page.lastPage+1) + ", " + memberId + ")\">Next</a>"
+				}
+
+				$("#comment-paging").html(item);
+			}
+		});
 	}
 
 	function resetComment(blogId, memberId) {

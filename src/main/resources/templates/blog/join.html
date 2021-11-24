@@ -45,7 +45,7 @@
                         <!-- end message -->
                         <h3 class="text-md mb-4">회원 가입</h3>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{name}" class="justifyAsia" style="">이 름</div>
                             </div>
                             <div class="col-sm-9">
@@ -54,7 +54,7 @@
                             <p th:errors="*{name}" style="color: #dc3545">message</p>
                         </div>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{uid}" class="justifyAsia" style="">아 이 디</div>
                             </div>
                             <div class="col-sm-9">
@@ -63,7 +63,7 @@
                             <p th:errors="*{uid}" style="color: #dc3545">message</p>
                         </div>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{pw}" class="justifyAsia" style="">비밀번호</div>
                             </div>
                             <div class="col-sm-9">
@@ -72,7 +72,7 @@
                             <p th:errors="*{pw}" style="color: #dc3545">message</p>
                         </div>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{studentId}" class="justifyAsia" style="">학 번</div>
                             </div>
                             <div class="col-sm-9">
@@ -81,7 +81,7 @@
                             <p th:errors="*{studentId}" style="color: #dc3545">message</p>
                         </div>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{tel}" class="justifyAsia" style="">전화번호</div>
                             </div>
                             <div class="col-sm-9">
@@ -90,7 +90,7 @@
                             <p th:errors="*{tel}" style="color: #dc3545">message</p>
                         </div>
                         <div class="form-inline form-group">
-                            <div class="col-sm-3" style="text-align: -webkit-center">
+                            <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
                                 <div th:for="*{profile}" class="justifyAsia" style="">사 진</div>
                             </div>
                             <div class="col-sm-9">
@@ -98,7 +98,9 @@
                             </div>
                             <p th:errors="*{profile}" style="color: #dc3545">message</p>
                         </div>
+                        <div  style="margin-top: 20px;">
                         <a href="#" class="btn btn-main" onclick="document.getElementById('contact-form').submit();">가입하기</a>
+                        </div>
                     </form>
                 </div>
 

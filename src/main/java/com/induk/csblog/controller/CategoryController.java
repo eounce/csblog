@@ -24,9 +24,6 @@ public class CategoryController {
     public List<Category> categoryList(){
 
         List<Category> categoryList = categoryService.categoryList();
-        //String n = (categoryList.get(1).getBlog() == null)? "null" : categoryList.get(1).getBlog().get(0).getTitle();
-        //log.info("\n\n\n\n\ncategoryName: " + categoryList.get(1).getName());
-        //log.info("\n\n\n\n\nblogName: " + n);
         return categoryList;
     }
 

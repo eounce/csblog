@@ -81,7 +81,7 @@
 							<div class="blog-item-content bg-white p-5">
 								<div class="blog-item-meta bg-gray py-1 px-2">
 									<span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i><th:block  th:text="' ' + ${blog.category.name}"></th:block></span>
-									<span class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i><th:block  th:text="' ' + ${blog.comments.size()} + '개'"></th:block></span>
+									<span id="comment-count" class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i><th:block  th:text="' ' + ${blog.comments.size()} + '개'"></th:block></span>
 									<span class="text-black text-capitalize mr-3"><i class="ti-time mr-1"></i><th:block  th:text="' ' + ${(blog.getBetweenToday().getSeconds()/86400 > 0)? blog.getBetweenToday().getSeconds()/86400 + '일 전': '오늘'}"></th:block></span>
 								</div>
 
@@ -308,9 +308,13 @@ Essential Scripts
 				alert('작성되었습니다.');
 				$("#comment-head").children().remove();
 
-				console.log(comments);
+				$("#comment-count").children().remove();
 
-				var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
+				var item = "<i class=\"ti-comment mr-2\"></i>" + comments.length + "개";
+				$("#comment-count").html(item);
+
+				console.log(comments);
+				item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
 						"<ul class=\"comment-tree list-unstyled\">"+
 						"<div id=\"comment-body\">";
 
@@ -374,9 +378,14 @@ Essential Scripts
 					alert('삭제되었습니다.');
 					$("#comment-head").children().remove();
 
+					$("#comment-count").children().remove();
+
+					var item = "<i class=\"ti-comment mr-2\"></i>" + comments.length + "개";
+					$("#comment-count").html(item);
+
 					console.log(comments);
 
-					var item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
+					item = "<h4 class=\"mb-4\">" + comments.length + " Comments" + "</h4>" +
 							"<ul class=\"comment-tree list-unstyled\">"+
 							"<div id=\"comment-body\">";
 

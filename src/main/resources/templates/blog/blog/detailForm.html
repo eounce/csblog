@@ -86,7 +86,7 @@
 								</div>
 
 								<h2 class="mt-3 mb-4"><a th:text="${blog.title}" style="line-break: anywhere"></a></h2>
-								<p class="lead mb-4" th:utext="${#strings.replace(#strings.replace(blog.content, newLineChar, '<br>'), ' ', '&nbsp;')}" style="line-break: anywhere"></p>
+								<div class="lead mb-4" th:utext="${#strings.replace(#strings.replace(blog.content, newLineChar, '<br>'), ' ', '&nbsp;')}" style="line-break: anywhere"></div>
 
 								<hr>
 								<div class="tag-option mt-2 clearfix">

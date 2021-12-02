@@ -34,4 +34,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     Long countByCategoryIdAndTitleContaining(Long categoryId, String searchText);
     Long countByTitleContaining(String searchText);
+
+    void deleteAllByMemberId(Long memberId);
 }

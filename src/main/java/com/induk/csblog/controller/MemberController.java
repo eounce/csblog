@@ -59,6 +59,7 @@ public class MemberController {
     public String updateForm(@PathVariable(name = "memberId") Long id, Model model) {
         Member findMember = memberService.getMemberById(id);
         JoinForm joinForm = new JoinForm();
+        joinForm.setId(id);
         joinForm.setName(findMember.getName());
         joinForm.setPw(findMember.getPw());
         joinForm.setStudentId(findMember.getStudentId());
@@ -90,6 +91,16 @@ public class MemberController {
 
         redirectAttributes.addAttribute("id", id);
         return "redirect:/csblog/members/{id}/update";
+    }
+
+    @GetMapping("/{memberId}/delete")
+    public String deleteMember(@PathVariable(name = "memberId") Long id, HttpServletRequest request) throws IOException {
+        memberService.delete(id);
+
+        HttpSession session = request.getSession(false);
+        if(session != null) session.invalidate();
+
+        return "redirect:/csblog";
     }
 
     @GetMapping("/login")

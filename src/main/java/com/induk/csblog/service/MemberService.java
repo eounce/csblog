@@ -5,6 +5,8 @@ import com.induk.csblog.domain.Member;
 import com.induk.csblog.domain.UploadFile;
 import com.induk.csblog.dto.JoinForm;
 import com.induk.csblog.dto.LoginForm;
+import com.induk.csblog.repository.BlogRepository;
+import com.induk.csblog.repository.CommentRepository;
 import com.induk.csblog.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BlogRepository blogRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Long add(JoinForm joinForm, UploadFile uploadFile) {
@@ -39,6 +43,15 @@ public class MemberService {
         if(member != null) {
             member.changeMember(joinForm.getPw(), joinForm.getTel(), uploadFile.getStoreFileName());
         }
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        commentRepository.deleteAllByMemberId(id);
+        blogRepository.deleteAllByMemberId(id);
+
+        Member member = memberRepository.findById(id).orElse(null);
+        memberRepository.delete(member);
     }
 
     public Member login(LoginForm loginForm) {

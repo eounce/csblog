@@ -46,7 +46,7 @@
                         <h3 class="text-md mb-4">회원 정보 수정</h3>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{name}" class="justifyAsia" style="">이 름</div>
+                                <div th:for="*{name}" class="justifyAsia" style="font-weight:bold;color:#000000;">이 름</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{name}" placeholder="Your Name" class="form-control" readonly style="background-color: #e5e5e5">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{uid}" class="justifyAsia" style="">아 이 디</div>
+                                <div th:for="*{uid}" class="justifyAsia" style="font-weight:bold;color:#000000;">아 이 디</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="email" th:field="*{uid}" placeholder="Email Address" class="form-control" readonly style="background-color: #e5e5e5">
@@ -64,7 +64,7 @@
                         </div>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{pw}" class="justifyAsia" style="">비밀번호</div>
+                                <div th:for="*{pw}" class="justifyAsia" style="font-weight:bold;color:#000000;">비밀번호</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{pw}" placeholder="Password" class="form-control">
@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{studentId}" class="justifyAsia" style="">학 번</div>
+                                <div th:for="*{studentId}" class="justifyAsia" style="font-weight:bold;color:#000000;">학 번</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{studentId}" placeholder="Student ID" class="form-control" readonly style="background-color: #e5e5e5">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{tel}" class="justifyAsia" style="">전화번호</div>
+                                <div th:for="*{tel}" class="justifyAsia" style="font-weight:bold;color:#000000;">전화번호</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{tel}" placeholder="Tel" class="form-control">
@@ -91,7 +91,7 @@
                         </div>
                         <div class="form-inline form-group">
                             <div class="col-sm-3" style="text-align: -webkit-center;top: 13px;">
-                                <div th:for="*{profile}" class="justifyAsia" style="">사 진</div>
+                                <div th:for="*{profile}" class="justifyAsia" style="font-weight:bold;color:#000000;">사 진</div>
                             </div>
                             <div class="col-sm-9">
                                 <input type="file" th:field="*{profile}" class="form-control" accept="image/gif,image/jpeg,image/png">
@@ -103,6 +103,7 @@
                             <input type="hidden" th:field="*{fileName}" th:value="*{fileName}">
                         </div>
                         <a href="#" class="btn btn-main" onclick="document.getElementById('contact-form').submit();">수정하기</a>
+                        <a th:href="@{|/csblog/members/${joinForm.id}/delete|}" class="btn btn-main">탈퇴하기</a>
                     </form>
                 </div>
 

@@ -82,7 +82,6 @@ public class BlogController {
         Member member = (Member) session.getAttribute("loginMember");
         blogForm.setMember(member);
         blogForm.setCategory(categoryService.findById(categoryId));
-
         blogService.add(blogForm);
 
         return "redirect:/csblog/blogs/category/" + categoryId;

@@ -9,6 +9,8 @@ import javax.validation.constraints.Pattern;
 
 @Data
 public class JoinForm {
+    private Long id;
+
     @Email(message = "메일 형식을 확인해주세요")
     @NotEmpty(message = "아이디를 입력해주세요")
     private String uid;
